@@ -1,4 +1,4 @@
-#!bin/pyton
+#!bin/python
 
 import dublincore as dc
 import csv
