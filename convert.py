@@ -27,7 +27,7 @@ def parse(fn):
 		fp = open(fn)
 		fields = fp.readline().rstrip('\n').split('\t')
 		tsv = csv.DictReader(fp, fieldnames=fields, dialect=TabFile)
-		while row = tsv.next():
+		for row in tsv:
 			makedc(row)
 			writefile(row['dc:identifier'])
 			makexml(row)
