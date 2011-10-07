@@ -1,24 +1,25 @@
 #!bin/python
 
+# TSV to Dublin Core/McMaster Repository conversion tool
+# Matt McCollow <mccollo@mcmaster.ca>, 2011
+
 from dublincore import dublinCoreMetadata
 import csv
 from sys import argv
 from xml.dom.minidom import Document
 
 DC_NS = 'http://purl.org/dc/elements/1.1/'
+XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'
+MACREPO_NS = 'http://repository.mcmaster.ca/schema/macrepo/elements/1.0/'
 
 class DublinCore(dublinCoreMetadata):
-	""" Add toprettyxml() func so we can treat this like an xml.dom.minidom.Document """
-	def toprettyxml():
+	""" Add a toxml() function so we can treat this like an xml.dom.minidom.Document """
+	def toxml():
 		self.makeXML(DC_NS)
 
 class TabFile(object):
 	""" A dialect for the csv.DictReader constructor """
 	delimiter = '\t'
-
-def usage():
-	""" Print a nice usage message """
-	print "Usage: " + os.path.basename(__file__) + " <filename>.tsv"
 
 def parse(fn):
 	""" Parse a TSV file """
@@ -28,7 +29,9 @@ def parse(fn):
 		tsv = csv.DictReader(fp, fieldnames=fields dialect=TabFile)
 		while row = tsv.next():
 			makedc(row)
+			writefile(row['dc:identifier'])
 			makexml(row)
+			writefile(row['dc:identifier'])
 	except IOError as (errno, strerror):
 		print "Error ({0}): {1}".format(errno, strerror)
 		raise SystemExit
@@ -54,16 +57,32 @@ def makedc(row):
 	return metadata
 
 def makexml(row):
-	""" Generate a custom XML file from a TSV """
+	""" Generate an XML file conforming to the macrepo schema from a TSV """
 	doc = Document()
+	root = doc.createElement('metadata')
+	root.setAttribute('xmlns:xsi', XSI_NS)
+	root.setAttribute('xmlns:macrepo', MACREPO_NS)
+	doc.appendChild(root)
+	oldnid = doc.createElement('macrepo:oldNid')
+	root.appendChild(doc.createTextNode(row.get('macrepo:oldNid', '')))
+	notes = doc.createElement('macrepo:notes')
+	root.appendChild(doc.createTextNode(row.get('macrepo:notes', '')))
+	scale = doc.createElement('macrepo:scale')
+	root.appendChild(doc.createTextNode(row.get('macrepo:scale', '')))
 	return doc
 
 def writefile(name, obj):
-	pass
+	fp = open(name + '.xml', 'w')
+	fp.write(obj.toxml())
+	fp.close()
 
 def chkarg(arg):
 	""" Was a TSV file specified? """
 	return False if arg[0] == '' else True
+
+def usage():
+	""" Print a nice usage message """
+	print "Usage: " + os.path.basename(__file__) + " <filename>.tsv"
 
 if __name__ == "__main__":
 	if chkarg(argv[0]):
