@@ -6,12 +6,12 @@ tsv-convert is a tool to parse formatted tsv and output Dublin Core xml and Macr
 Installation
 ------------
 
-  python setup.py install
+    python setup.py install
 
 Usage
 -----
 
-  tsv-convert.py foo.tsv
+    tsv-convert.py foo.tsv
 
 License
 -----
