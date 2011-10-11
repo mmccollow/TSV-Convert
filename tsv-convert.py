@@ -15,7 +15,7 @@ MACREPO_NS = 'http://repository.mcmaster.ca/schema/macrepo/elements/1.0/'
 
 class DublinCore(dublinCoreMetadata):
 	""" Add a toxml() function so we can treat this like an xml.dom.minidom.Document """
-	def toxml():
+	def toxml(self):
 		self.makeXML(DC_NS)
 
 class TabFile(object):
@@ -29,10 +29,10 @@ def parse(fn):
 		fields = fp.readline().rstrip('\n').split('\t')
 		tsv = csv.DictReader(fp, fieldnames=fields, dialect=TabFile)
 		for row in tsv:
-			makedc(row)
-			writefile(row['dc:identifier'])
-			makexml(row)
-			writefile(row['dc:identifier'])
+			dc = makedc(row)
+			writefile(row['dc:identifier'], dc)
+			xml = makexml(row)
+			writefile(row['dc:identifier'], xml)
 	except IOError as (errno, strerror):
 		print "Error ({0}): {1}".format(errno, strerror)
 		raise SystemExit
@@ -86,8 +86,8 @@ def usage():
 	print "Usage: " + os.path.basename(__file__) + " <filename>.tsv"
 
 if __name__ == "__main__":
-	if chkarg(argv[0]):
-		parse(argv[0])
+	if chkarg(argv[1]):
+		parse(argv[1])
 	else:
 		usage()
 
