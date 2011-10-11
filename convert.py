@@ -12,11 +12,6 @@ DC_NS = 'http://purl.org/dc/elements/1.1/'
 XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'
 MACREPO_NS = 'http://repository.mcmaster.ca/schema/macrepo/elements/1.0/'
 
-class DublinCore(dublinCoreMetadata):
-	""" Add a toxml() function so we can treat this like an xml.dom.minidom.Document """
-	def toxml(self):
-		self.makeXML(DC_NS)
-
 class TabFile(object):
 	""" A dialect for the csv.DictReader constructor """
 	delimiter = '\t'
@@ -39,7 +34,7 @@ def parse(fn):
 
 def makedc(row):
 	""" Generate a Dublin Core XML file from a TSV """
-	metadata = DublinCore()
+	metadata = dublinCoreMetadata()
 	metadata.Contributor = row.get('dc:contributor', '')
 	metadata.Coverage = row.get('dc:coverage', '')
 	metadata.Creator = row.get('dc:creator', '')
@@ -72,8 +67,12 @@ def makexml(row):
 	return doc
 
 def writefile(name, obj):
-	fp = open(name + '.xml', 'w')
-	fp.write(obj.toxml())
+	if isinstance(obj, dublinCoreMetadata):
+		fp = open(name + '-DC.xml', 'w')
+		fp.write(obj.makeXML(DC_NS))
+	elif isinstance(obj, Document):
+		fp = open(name + '-macrepo.xml', 'w')
+		fp.write(obj.toxml())
 	fp.close()
 
 def chkarg(arg):
