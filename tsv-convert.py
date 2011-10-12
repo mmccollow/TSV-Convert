@@ -78,14 +78,14 @@ def writefile(name, obj):
 
 def chkarg(arg):
 	""" Was a TSV file specified? """
-	return False if arg[0] == '' else True
+	return False if arg[1] == '' else True
 
 def usage():
 	""" Print a nice usage message """
-	print "Usage: " + os.path.basename(__file__) + " <filename>.tsv"
+	print "Usage: python " + os.path.basename(__file__) + " <filename>.tsv"
 
 if __name__ == "__main__":
-	if chkarg(argv[1]):
+	if chkarg(argv):
 		parse(argv[1])
 	else:
 		usage()
