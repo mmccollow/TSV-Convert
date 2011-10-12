@@ -61,11 +61,14 @@ def makexml(row):
 	root.setAttribute('xmlns:macrepo', MACREPO_NS)
 	doc.appendChild(root)
 	oldnid = doc.createElement('macrepo:oldNid')
-	root.appendChild(doc.createTextNode(row.get('macrepo:oldNid', '')))
+	oldnid.appendChild(doc.createTextNode(row.get('macrepo:oldNid', '')))
+	root.appendChild(oldnid)
 	notes = doc.createElement('macrepo:notes')
-	root.appendChild(doc.createTextNode(row.get('macrepo:notes', '')))
+	notes.appendChild(doc.createTextNode(row.get('macrepo:notes', '')))
+	root.appendChild(notes)
 	scale = doc.createElement('macrepo:scale')
-	root.appendChild(doc.createTextNode(row.get('macrepo:scale', '')))
+	scale.appendChild(doc.createTextNode(row.get('macrepo:scale', '')))
+	root.appendChild(scale)
 	return doc
 
 def writefile(name, obj):
@@ -74,7 +77,7 @@ def writefile(name, obj):
 		fp.write(obj.makeXML(DC_NS))
 	elif isinstance(obj, Document):
 		fp = open(name + '-macrepo.xml', 'w')
-		fp.write(obj.toxml())
+		fp.write(obj.toprettyxml())
 	fp.close()
 
 def chkarg(arg):
