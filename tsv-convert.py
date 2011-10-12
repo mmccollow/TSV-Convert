@@ -86,7 +86,7 @@ def chkarg(arg):
 
 def usage():
 	""" Print a nice usage message """
-	print "Usage: python " + basename(__file__) + " <filename>.tsv"
+	print "Usage: bin/python " + basename(__file__) + " <filename>.tsv"
 
 if __name__ == "__main__":
 	if chkarg(argv):
