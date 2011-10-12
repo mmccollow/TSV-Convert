@@ -2,6 +2,7 @@
 
 # TSV to Dublin Core/McMaster Repository conversion tool
 # Matt McCollow <mccollo@mcmaster.ca>, 2011
+# Nick Ruest <ruestn@mcmaster.ca>, 2011
 
 from dublincore import dublinCoreMetadata
 import csv
