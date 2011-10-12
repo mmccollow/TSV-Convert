@@ -72,6 +72,7 @@ def makexml(row):
 	return doc
 
 def writefile(name, obj):
+	""" Writes Dublin Core or Macrepo XML object to a file """
 	if isinstance(obj, dublinCoreMetadata):
 		fp = open(name + '-DC.xml', 'w')
 		fp.write(obj.makeXML(DC_NS))
