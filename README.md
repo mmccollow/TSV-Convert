@@ -11,7 +11,7 @@ Installation
 Usage
 -----
 
-    tsv-convert.py foo.tsv
+    python tsv-convert.py foo.tsv
 
 License
 -----
