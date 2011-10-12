@@ -8,6 +8,7 @@ from dublincore import dublinCoreMetadata
 import csv
 from sys import argv
 from xml.dom.minidom import Document
+from os.path import basename
 
 DC_NS = 'http://purl.org/dc/elements/1.1/'
 XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'
@@ -78,11 +79,11 @@ def writefile(name, obj):
 
 def chkarg(arg):
 	""" Was a TSV file specified? """
-	return False if arg[1] == '' else True
+	return False if len(arg) < 2 else True
 
 def usage():
 	""" Print a nice usage message """
-	print "Usage: python " + os.path.basename(__file__) + " <filename>.tsv"
+	print "Usage: python " + basename(__file__) + " <filename>.tsv"
 
 if __name__ == "__main__":
 	if chkarg(argv):
