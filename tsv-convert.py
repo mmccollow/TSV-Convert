@@ -4,7 +4,7 @@
 # Matt McCollow <mccollo@mcmaster.ca>, 2011
 # Nick Ruest <ruestn@mcmaster.ca>, 2011
 
-from dublincore import dublinCoreMetadata
+from DublinCore import DublinCore
 import csv
 from sys import argv
 from xml.dom.minidom import Document
@@ -36,7 +36,7 @@ def parse(fn):
 
 def makedc(row):
 	""" Generate a Dublin Core XML file from a TSV """
-	metadata = dublinCoreMetadata()
+	metadata = DublinCore()
 	metadata.Contributor = row.get('dc:contributor', '')
 	metadata.Coverage = row.get('dc:coverage', '')
 	metadata.Creator = row.get('dc:creator', '')
@@ -46,7 +46,7 @@ def makedc(row):
 	metadata.Identifier = row.get('dc:identifier', '')
 	metadata.Language = row.get('dc:language', '')
 	metadata.Publisher = row.get('dc:publisher', '')
-	metadata.Relation = row.get('dc:relation', '')
+	metadata.Relation = row.get('dc:relation', '').split('|')
 	metadata.Rights = row.get('dc:rights', '')
 	metadata.Source = row.get('dc:source', '')
 	metadata.Subject = row.get('dc:subject', '')
@@ -73,7 +73,7 @@ def makexml(row):
 
 def writefile(name, obj):
 	""" Writes Dublin Core or Macrepo XML object to a file """
-	if isinstance(obj, dublinCoreMetadata):
+	if isinstance(obj, DublinCore):
 		fp = open(name + '-DC.xml', 'w')
 		fp.write(obj.makeXML(DC_NS))
 	elif isinstance(obj, Document):
