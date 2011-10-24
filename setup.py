@@ -2,7 +2,7 @@
 import ez_setup
 ez_setup.use_setuptools()
 
-  from setuptools import setup, find_packages
+from setuptools import setup, find_packages
 
 description = \
 """
@@ -11,9 +11,9 @@ This package is used to create individual Dublin Core and Macrepo xml records fr
 
 install_requires = []
 try:
-    import DublinCore
-    except ImportError:
-        install_requires.append('dublincore>=1.0')
+  import DublinCore
+except ImportError:
+  install_requires.append('dublincore>=1.0')
 
 setup (
     name = 'tsv-convert',
